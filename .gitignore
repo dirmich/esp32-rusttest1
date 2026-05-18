@@ -1,0 +1,25 @@
+# Rust build output
+/target/
+
+# ESP-IDF generated local build/config artifacts
+/build/
+/.embuild/
+/sdkconfig
+/sdkconfig.old
+/sdkconfig.ci
+/managed_components/
+
+# Local environment files
+.env
+.env.*
+
+# Editor and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
