@@ -28,6 +28,7 @@ docker compose run --rm build
 
 첫 실행은 `espressif/idf-rust:all_latest` 이미지를 내려받기 때문에 오래 걸릴 수 있습니다.
 이 프로젝트는 `riscv32imc-esp-espidf` 표준 라이브러리가 포함된 Espressif Rust 툴체인이 필요하므로 `rust-toolchain.toml`에서 `esp` 채널을 사용합니다.
+ESP-IDF용 Rust target은 사전 설치 target이 아니라 Cargo의 `build-std` 기능으로 `std`와 `panic_abort`를 빌드합니다.
 
 릴리스 빌드는 다음 명령을 사용합니다.
 

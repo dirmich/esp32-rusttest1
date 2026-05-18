@@ -64,6 +64,7 @@ u8g2 기준으로는 보통 `U8G2_SSD1306_128X64_NONAME_F_HW_I2C` 또는 유사 
 - ESP-IDF 기반 `std` 환경을 사용한다.
 - Docker 빌드 환경은 로컬 Rust 설치에 의존하지 않아야 한다.
 - `rust-toolchain.toml`은 upstream `stable`이 아니라 Espressif `esp` 채널을 사용한다.
+- `.cargo/config.toml`은 ESP-IDF target을 위해 `build-std = ["std", "panic_abort"]`를 사용한다.
 - u8g2 호환성은 디스플레이 컨트롤러와 해상도 식별 기준으로 사용한다.
 - 모듈 경계가 명확해야 한다.
 - 하드웨어 값은 매직 넘버로 흩어지지 않아야 한다.
