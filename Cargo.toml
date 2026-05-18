@@ -1,0 +1,25 @@
+[package]
+name = "highmaru-oled"
+version = "0.1.0"
+edition = "2021"
+resolver = "2"
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+
+[profile.dev]
+debug = true
+opt-level = "z"
+
+[dependencies]
+anyhow = "1"
+embedded-graphics = "0.8"
+embedded-hal = "1"
+esp-idf-hal = "0.45"
+esp-idf-sys = { version = "0.36", features = ["binstart"] }
+ssd1306 = "0.9"
+
+[build-dependencies]
+embuild = "0.33"

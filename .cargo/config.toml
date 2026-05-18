@@ -1,0 +1,8 @@
+[build]
+target = "riscv32imc-esp-espidf"
+
+[target.riscv32imc-esp-espidf]
+linker = "ldproxy"
+
+[env]
+ESP_IDF_VERSION = "v5.2.2"

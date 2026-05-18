@@ -1,0 +1,24 @@
+services:
+  build:
+    build:
+      context: .
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - cargo-registry:/root/.cargo/registry
+      - cargo-git:/root/.cargo/git
+    command: cargo build
+
+  release:
+    build:
+      context: .
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - cargo-registry:/root/.cargo/registry
+      - cargo-git:/root/.cargo/git
+    command: cargo build --release
+
+volumes:
+  cargo-registry:
+  cargo-git:
