@@ -9,6 +9,26 @@ services:
       - cargo-git:/root/.cargo/git
     command: cargo build
 
+  build-heltec:
+    build:
+      context: .
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - cargo-registry:/root/.cargo/registry
+      - cargo-git:/root/.cargo/git
+    command: cargo build --target xtensa-esp32-espidf --no-default-features --features board-heltec,lora
+
+  build-esp32-cam:
+    build:
+      context: .
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - cargo-registry:/root/.cargo/registry
+      - cargo-git:/root/.cargo/git
+    command: cargo build --target xtensa-esp32-espidf --no-default-features --features board-esp32-cam,camera
+
   release:
     build:
       context: .
@@ -18,6 +38,26 @@ services:
       - cargo-registry:/root/.cargo/registry
       - cargo-git:/root/.cargo/git
     command: cargo build --release
+
+  release-heltec:
+    build:
+      context: .
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - cargo-registry:/root/.cargo/registry
+      - cargo-git:/root/.cargo/git
+    command: cargo build --release --target xtensa-esp32-espidf --no-default-features --features board-heltec,lora
+
+  release-esp32-cam:
+    build:
+      context: .
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - cargo-registry:/root/.cargo/registry
+      - cargo-git:/root/.cargo/git
+    command: cargo build --release --target xtensa-esp32-espidf --no-default-features --features board-esp32-cam,camera
 
 volumes:
   cargo-registry:

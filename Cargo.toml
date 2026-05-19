@@ -13,6 +13,14 @@ codegen-units = 1
 debug = true
 opt-level = "z"
 
+[features]
+default = ["board-original"]
+board-original = []
+board-heltec = []
+board-esp32-cam = []
+camera = []
+lora = []
+
 [dependencies]
 anyhow = "1"
 embedded-graphics = "0.8"

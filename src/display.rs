@@ -13,11 +13,7 @@ use crate::config;
 type DisplaySize = DisplaySize128x64;
 
 pub struct OledDisplay<I2C> {
-    display: Ssd1306<
-        I2CInterface<I2C>,
-        DisplaySize,
-        BufferedGraphicsMode<DisplaySize>,
-    >,
+    display: Ssd1306<I2CInterface<I2C>, DisplaySize, BufferedGraphicsMode<DisplaySize>>,
 }
 
 impl<I2C, E> OledDisplay<I2C>
@@ -61,12 +57,7 @@ where
                 config::VIEWPORT_HEIGHT / 2,
             );
 
-        Text::with_baseline(
-            text,
-            text_origin,
-            style,
-            Baseline::Middle,
-        )
+        Text::with_baseline(text, text_origin, style, Baseline::Middle)
             .draw(&mut self.display)
             .map_err(|err| anyhow::anyhow!("OLED draw failed: {err:?}"))?;
 
