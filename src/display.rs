@@ -23,12 +23,15 @@ where
 {
     pub fn new(i2c: I2C, address: u8) -> anyhow::Result<Self> {
         let interface = I2CDisplayInterface::new_custom_address(i2c, address);
-        let mut display = Ssd1306::new(interface, DisplaySize128x64, DisplayRotation::Rotate0)
+        let mut display = Ssd1306::new(interface, DisplaySize128x64, display_rotation())
             .into_buffered_graphics_mode();
 
         display
             .init()
             .map_err(|err| anyhow::anyhow!("OLED init failed: {err:?}"))?;
+        display
+            .set_brightness(Brightness::BRIGHTEST)
+            .map_err(|err| anyhow::anyhow!("OLED brightness failed: {err:?}"))?;
 
         Ok(Self { display })
     }
@@ -66,5 +69,14 @@ where
             .map_err(|err| anyhow::anyhow!("OLED flush failed: {err:?}"))?;
 
         Ok(())
+    }
+}
+
+fn display_rotation() -> DisplayRotation {
+    match config::OLED_ROTATION_DEGREES {
+        90 => DisplayRotation::Rotate90,
+        180 => DisplayRotation::Rotate180,
+        270 => DisplayRotation::Rotate270,
+        _ => DisplayRotation::Rotate0,
     }
 }

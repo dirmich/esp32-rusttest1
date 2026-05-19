@@ -14,7 +14,7 @@ debug = true
 opt-level = "z"
 
 [features]
-default = ["board-original"]
+default = ["board-heltec"]
 board-original = []
 board-heltec = []
 board-esp32-cam = []

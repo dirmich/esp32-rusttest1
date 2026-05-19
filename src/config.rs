@@ -36,6 +36,10 @@ pub const HAS_LORA: bool = false;
 #[cfg(feature = "board-original")]
 pub const OLED_RESET_PIN: Option<i32> = None;
 #[cfg(feature = "board-original")]
+pub const OLED_POWER_PIN: Option<i32> = None;
+#[cfg(feature = "board-original")]
+pub const OLED_ROTATION_DEGREES: u16 = 0;
+#[cfg(feature = "board-original")]
 pub const SDA_PIN: i32 = 5;
 #[cfg(feature = "board-original")]
 pub const SCL_PIN: i32 = 6;
@@ -56,6 +60,10 @@ pub const HAS_CAMERA: bool = false;
 pub const HAS_LORA: bool = true;
 #[cfg(feature = "board-heltec")]
 pub const OLED_RESET_PIN: Option<i32> = Some(16);
+#[cfg(feature = "board-heltec")]
+pub const OLED_POWER_PIN: Option<i32> = Some(21);
+#[cfg(feature = "board-heltec")]
+pub const OLED_ROTATION_DEGREES: u16 = 180;
 #[cfg(feature = "board-heltec")]
 pub const SDA_PIN: i32 = 4;
 #[cfg(feature = "board-heltec")]
@@ -78,6 +86,10 @@ pub const HAS_LORA: bool = false;
 #[cfg(feature = "board-esp32-cam")]
 pub const OLED_RESET_PIN: Option<i32> = None;
 #[cfg(feature = "board-esp32-cam")]
+pub const OLED_POWER_PIN: Option<i32> = None;
+#[cfg(feature = "board-esp32-cam")]
+pub const OLED_ROTATION_DEGREES: u16 = 0;
+#[cfg(feature = "board-esp32-cam")]
 pub const SDA_PIN: i32 = 14;
 #[cfg(feature = "board-esp32-cam")]
 pub const SCL_PIN: i32 = 15;
@@ -93,6 +105,7 @@ pub const VIEWPORT_Y_OFFSET: i32 = 0;
 pub const DISPLAY_TEXT: &str = "highmaru";
 
 #[cfg(all(feature = "board-heltec", feature = "lora"))]
+#[allow(dead_code)]
 pub mod lora {
     pub const CHIP: &str = "SX1276/SX1278";
     pub const SCK_PIN: i32 = 5;
@@ -106,6 +119,7 @@ pub mod lora {
 }
 
 #[cfg(all(feature = "board-esp32-cam", feature = "camera"))]
+#[allow(dead_code)]
 pub mod camera {
     pub const MODEL: &str = "OV2640";
     pub const PWDN_PIN: i32 = 32;
