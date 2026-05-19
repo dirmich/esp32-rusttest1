@@ -53,3 +53,15 @@ Windows Docker Desktop에서는 컨테이너에서 `COM10`을 직접 다루기 �
 ```powershell
 espflash flash --monitor --port COM10 target/riscv32imc-esp-espidf/debug/highmaru-oled
 ```
+
+macOS에서는 `/dev/cu.*` 포트를 확인한 뒤 다음처럼 플래시합니다.
+
+```zsh
+espflash flash --monitor --port /dev/cu.usbmodemXXXX target/riscv32imc-esp-espidf/debug/highmaru-oled
+```
+
+릴리스 빌드라면 다음 경로의 산출물을 사용합니다.
+
+```zsh
+espflash flash --monitor --port /dev/cu.usbmodemXXXX target/riscv32imc-esp-espidf/release/highmaru-oled
+```

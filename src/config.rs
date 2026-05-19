@@ -6,7 +6,7 @@ pub const SCL_PIN: i32 = 6;
 
 pub const VIEWPORT_WIDTH: i32 = 72;
 pub const VIEWPORT_HEIGHT: i32 = 40;
-pub const VIEWPORT_X_OFFSET: i32 = 30;
-pub const VIEWPORT_Y_OFFSET: i32 = 12;
+pub const VIEWPORT_X_OFFSET: i32 = 28;
+pub const VIEWPORT_Y_OFFSET: i32 = 24;
 
 pub const DISPLAY_TEXT: &str = "highmaru";

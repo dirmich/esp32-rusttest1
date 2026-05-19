@@ -38,7 +38,9 @@ where
     }
 
     pub fn show_text(&mut self, text: &str) -> anyhow::Result<()> {
-        self.display.clear(BinaryColor::Off)?;
+        self.display
+            .clear(BinaryColor::Off)
+            .map_err(|err| anyhow::anyhow!("OLED clear failed: {err:?}"))?;
 
         let viewport_origin = Point::new(config::VIEWPORT_X_OFFSET, config::VIEWPORT_Y_OFFSET);
         let viewport_size = Size::new(
@@ -52,9 +54,16 @@ where
             .map_err(|err| anyhow::anyhow!("OLED frame draw failed: {err:?}"))?;
 
         let style = MonoTextStyle::new(&FONT_6X10, BinaryColor::On);
+        let text_width = text.chars().count() as i32 * FONT_6X10.character_size.width as i32;
+        let text_origin = viewport_origin
+            + Point::new(
+                (config::VIEWPORT_WIDTH - text_width) / 2,
+                config::VIEWPORT_HEIGHT / 2,
+            );
+
         Text::with_baseline(
             text,
-            viewport_origin + Point::new(12, 20),
+            text_origin,
             style,
             Baseline::Middle,
         )
