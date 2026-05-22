@@ -3,7 +3,7 @@ use esp_idf_hal::{delay::FreeRtos, gpio::PinDriver};
 use esp_idf_hal::{
     i2c::{I2cConfig, I2cDriver},
     peripherals::Peripherals,
-    prelude::*,
+    units::FromValueType,
 };
 
 use crate::config;
@@ -40,22 +40,85 @@ pub fn create_i2c_driver(peripherals: Peripherals) -> anyhow::Result<I2cDriver<'
         &i2c_config,
     )?;
 
+    #[cfg(any(
+        feature = "board-esp32-p4-pico-kit-a",
+        feature = "board-esp32-p4-wifi6-kit-a"
+    ))]
+    let i2c = I2cDriver::new(
+        peripherals.i2c0,
+        peripherals.pins.gpio7,
+        peripherals.pins.gpio8,
+        &i2c_config,
+    )?;
+
     Ok(i2c)
 }
 
-fn log_selected_board() {
+pub fn log_selected_board() {
     println!(
-        "board: {}, oled=0x{:02x}, sda=GPIO{}, scl=GPIO{}, reset={}, power={}, rotation={}deg, camera={}, lora={}",
+        "board: {}, oled={}, i2c_sda=GPIO{}, i2c_scl=GPIO{}, reset={}, power={}, rotation={}deg, camera={}, audio={}, wifi={}, lora={}",
         config::BOARD_NAME,
-        config::OLED_I2C_ADDRESS,
+        oled_label(),
         config::SDA_PIN,
         config::SCL_PIN,
         pin_label(config::OLED_RESET_PIN),
         pin_label(config::OLED_POWER_PIN),
         config::OLED_ROTATION_DEGREES,
         config::HAS_CAMERA,
+        config::HAS_AUDIO,
+        config::HAS_WIFI,
         config::HAS_LORA,
     );
+
+    #[cfg(all(
+        any(
+            feature = "board-esp32-p4-pico-kit-a",
+            feature = "board-esp32-p4-wifi6-kit-a"
+        ),
+        feature = "audio"
+    ))]
+    println!(
+        "audio: codec={}, amp={}, codec_i2c=0x{:02x}, mclk=GPIO{}, sclk=GPIO{}, dout=GPIO{}, lrck=GPIO{}, din=GPIO{}, pa_en=GPIO{}",
+        config::audio::CODEC,
+        config::audio::AMPLIFIER,
+        config::audio::CODEC_I2C_ADDRESS,
+        config::audio::I2S_MCLK_PIN,
+        config::audio::I2S_SCLK_PIN,
+        config::audio::I2S_DOUT_PIN,
+        config::audio::I2S_LRCK_PIN,
+        config::audio::I2S_DIN_PIN,
+        config::audio::PA_ENABLE_PIN,
+    );
+
+    #[cfg(all(
+        any(
+            feature = "board-esp32-p4-pico-kit-a",
+            feature = "board-esp32-p4-wifi6-kit-a"
+        ),
+        feature = "camera"
+    ))]
+    println!(
+        "camera: interface={}, kit_module={}, compatible_sensor={}",
+        config::camera::INTERFACE,
+        config::camera::KIT_MODULE,
+        config::camera::COMPATIBLE_SENSOR,
+    );
+
+    #[cfg(all(feature = "board-esp32-p4-wifi6-kit-a", feature = "wifi"))]
+    println!(
+        "wifi: coprocessor={}, host_interface={}, radio={}",
+        config::wifi::COPROCESSOR,
+        config::wifi::HOST_INTERFACE,
+        config::wifi::RADIO,
+    );
+}
+
+fn oled_label() -> String {
+    if config::HAS_OLED {
+        format!("0x{:02x}", config::OLED_I2C_ADDRESS)
+    } else {
+        "none".to_owned()
+    }
 }
 
 fn pin_label(pin: Option<i32>) -> String {

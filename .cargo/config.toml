@@ -4,6 +4,9 @@ target = "riscv32imc-esp-espidf"
 [target.riscv32imc-esp-espidf]
 linker = "ldproxy"
 
+[target.riscv32imafc-esp-espidf]
+linker = "ldproxy"
+
 [target.xtensa-esp32-espidf]
 linker = "ldproxy"
 
@@ -11,4 +14,4 @@ linker = "ldproxy"
 build-std = ["std", "panic_abort"]
 
 [env]
-ESP_IDF_VERSION = "v5.2.2"
+ESP_IDF_VERSION = "v5.4.2"

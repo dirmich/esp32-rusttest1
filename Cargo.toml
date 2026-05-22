@@ -18,6 +18,10 @@ default = ["board-heltec"]
 board-original = []
 board-heltec = []
 board-esp32-cam = []
+board-esp32-p4-pico-kit-a = []
+board-esp32-p4-wifi6-kit-a = []
+audio = []
+wifi = []
 camera = []
 lora = []
 
@@ -25,8 +29,8 @@ lora = []
 anyhow = "1"
 embedded-graphics = "0.8"
 embedded-hal = "1"
-esp-idf-hal = "0.45"
-esp-idf-sys = { version = "0.36", features = ["binstart"] }
+esp-idf-hal = "0.46"
+esp-idf-sys = { version = "0.37", features = ["binstart"] }
 ssd1306 = "0.9"
 
 [build-dependencies]

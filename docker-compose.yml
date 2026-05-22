@@ -29,6 +29,30 @@ services:
       - cargo-git:/root/.cargo/git
     command: cargo build --target xtensa-esp32-espidf --no-default-features --features board-esp32-cam,camera
 
+  build-esp32-p4-pico-kit-a:
+    build:
+      context: .
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - cargo-registry:/root/.cargo/registry
+      - cargo-git:/root/.cargo/git
+    environment:
+      ESP_IDF_VERSION: v5.4.2
+    command: cargo build --target riscv32imafc-esp-espidf --no-default-features --features board-esp32-p4-pico-kit-a,audio,camera
+
+  build-esp32-p4-wifi6-kit-a:
+    build:
+      context: .
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - cargo-registry:/root/.cargo/registry
+      - cargo-git:/root/.cargo/git
+    environment:
+      ESP_IDF_VERSION: v5.4.2
+    command: cargo build --target riscv32imafc-esp-espidf --no-default-features --features board-esp32-p4-wifi6-kit-a,audio,camera,wifi
+
   release:
     build:
       context: .
@@ -58,6 +82,30 @@ services:
       - cargo-registry:/root/.cargo/registry
       - cargo-git:/root/.cargo/git
     command: cargo build --release --target xtensa-esp32-espidf --no-default-features --features board-esp32-cam,camera
+
+  release-esp32-p4-pico-kit-a:
+    build:
+      context: .
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - cargo-registry:/root/.cargo/registry
+      - cargo-git:/root/.cargo/git
+    environment:
+      ESP_IDF_VERSION: v5.4.2
+    command: cargo build --release --target riscv32imafc-esp-espidf --no-default-features --features board-esp32-p4-pico-kit-a,audio,camera
+
+  release-esp32-p4-wifi6-kit-a:
+    build:
+      context: .
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - cargo-registry:/root/.cargo/registry
+      - cargo-git:/root/.cargo/git
+    environment:
+      ESP_IDF_VERSION: v5.4.2
+    command: cargo build --release --target riscv32imafc-esp-espidf --no-default-features --features board-esp32-p4-wifi6-kit-a,audio,camera,wifi
 
 volumes:
   cargo-registry:

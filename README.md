@@ -11,8 +11,9 @@ Cargo feature로 보드별 I2C 핀과 표시 영역을 선택합니다. feature�
 | `board-original` | none | `riscv32imc-esp-espidf` | GPIO5 | GPIO6 | none | 72 x 40 at `(28, 24)` | none |
 | `board-heltec` | `lora` | `xtensa-esp32-espidf` | GPIO4 | GPIO15 | GPIO16 | 128 x 64 at `(0, 0)` | SX1276/SX1278 LoRa |
 | `board-esp32-cam` | `camera` | `xtensa-esp32-espidf` | GPIO14 | GPIO15 | none | 128 x 64 at `(0, 0)` | OV2640 camera |
+| `board-esp32-p4-pico-kit-a` | `audio,camera` | `riscv32imafc-esp-espidf` | GPIO7 | GPIO8 | none | none | ES8311 audio, RPi Camera(B) over MIPI-CSI |
 
-기능 feature는 보드 capability 검사를 통과해야 합니다. `camera`는 `board-esp32-cam`에서만, `lora`는 `board-heltec`에서만 사용할 수 있습니다. 예를 들어 `board-original,lora` 또는 `board-heltec,camera` 조합은 빌드 단계에서 실패합니다.
+기능 feature는 보드 capability 검사를 통과해야 합니다. `camera`는 `board-esp32-cam` 또는 `board-esp32-p4-pico-kit-a`에서만, `audio`는 `board-esp32-p4-pico-kit-a`에서만, `lora`는 `board-heltec`에서만 사용할 수 있습니다. 예를 들어 `board-original,lora` 또는 `board-heltec,camera` 조합은 빌드 단계에서 실패합니다.
 
 보드 선택 예시는 다음과 같습니다.
 
@@ -26,6 +27,9 @@ cargo build --target xtensa-esp32-espidf --no-default-features --features board-
 
 # ESP32-CAM
 cargo build --target xtensa-esp32-espidf --no-default-features --features board-esp32-cam,camera
+
+# Waveshare ESP32-P4-Pico-KIT-A
+cargo build --target riscv32imafc-esp-espidf --no-default-features --features board-esp32-p4-pico-kit-a,audio,camera
 ```
 
 Docker 빌드는 보드별 서비스를 사용할 수 있습니다.
@@ -34,6 +38,7 @@ Docker 빌드는 보드별 서비스를 사용할 수 있습니다.
 docker compose run --rm build
 docker compose run --rm build-heltec
 docker compose run --rm build-esp32-cam
+docker compose run --rm build-esp32-p4-pico-kit-a
 ```
 
 현재 연결된 Heltec V2는 이 환경에서 `/dev/cu.usbserial-0001`와 `/dev/tty.usbserial-0001`로 보입니다. 일반적으로 macOS에서는 플래시에 `/dev/cu.usbserial-0001`를 사용합니다.
@@ -45,6 +50,19 @@ espflash flash --monitor --port /dev/cu.usbserial-0001 target/xtensa-esp32-espid
 Heltec WiFi LoRa 32 V2는 SX1276/SX1278 LoRa 칩을 포함합니다. 이 펌웨어는 `board-heltec` 선택 시 OLED 초기화 전에 GPIO16을 low/high로 토글하고, `lora` 기능은 Heltec 보드에서만 켤 수 있게 제한합니다.
 
 ESP32-CAM은 OV2640 카메라 모듈을 전제로 합니다. `camera` 기능은 ESP32-CAM 보드에서만 켤 수 있게 제한합니다.
+
+Waveshare ESP32-P4-Pico-KIT-A는 온보드 SSD1306 OLED가 없으므로 이 펌웨어에서는 OLED 초기화를 건너뛰고 보드/오디오/카메라 설정을 로그로 출력한 뒤 유지됩니다. Kit-A 구성품의 RPi Camera(B)는 MIPI-CSI 2-lane 포트를 사용하며, 스피커는 ES8311 Codec + NS4150B 앰프 경로를 사용합니다. ESP32-P4-Pico의 기본 I2C는 SDA GPIO7, SCL GPIO8이고 ES8311 Codec 주소는 `0x18`입니다.
+
+P4 Kit-A 오디오 핀 정의:
+
+| Signal | GPIO |
+| --- | ---: |
+| MCLK | GPIO13 |
+| SCLK | GPIO12 |
+| ASDOUT / DOUT | GPIO11 |
+| LRCK | GPIO10 |
+| DSDIN / DIN | GPIO9 |
+| PA enable | GPIO53 |
 
 ## 기존 기본 설정
 
@@ -96,6 +114,15 @@ Windows Docker Desktop에서는 컨테이너에서 `COM10`을 직접 다루기 �
 
 ```powershell
 espflash flash --monitor --port COM10 target/riscv32imc-esp-espidf/debug/highmaru-oled
+```
+
+ESP32-P4-Pico-KIT-A가 Windows에서 `COM12`로 보이면 다음 경로를 사용합니다.
+
+```powershell
+# espflash flash --monitor --port COM12 target/riscv32imafc-esp-espidf/debug/highmaru-oled
+# ../../espflash.exe flash --chip esp32p4 --before no-reset --no-stub --baud 115200 --port COM12 target/riscv32imafc-esp-espidf/debug/highmaru-oled
+# ../../espflash.exe flash --chip esp32p4 --before default-reset --no-stub --baud 115200 --port COM12 target/riscv32imafc-esp-espidf/debug/highmaru-oled
+../../espflash.exe flash --monitor --chip esp32p4 --before default-reset --no-stub --baud 115200 --port COM12 target/riscv32imafc-esp-espidf/debug/highmaru-oled
 ```
 
 macOS에서는 `/dev/cu.*` 포트를 확인한 뒤 다음처럼 플래시합니다.
